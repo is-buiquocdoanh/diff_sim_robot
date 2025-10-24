@@ -34,7 +34,7 @@ def generate_launch_description():
                 PythonLaunchDescriptionSource([os.path.join(
                     get_package_share_directory('gazebo_ros'), 'launch', 'gazebo.launch.py')]),
                     launch_arguments={
-                        # 'world': world_file,
+                        'world': world_file,
                         'extra_gazebo_args': '--ros-args --params-file ' + gazebo_params_file}.items()
              )
 
@@ -58,7 +58,7 @@ def generate_launch_description():
     
     # Launch them all!
     return LaunchDescription([
-        rsp,
+        rsp, #/robot_description
         gazebo,
         spawn_entity,
         # diff_drive_spawner,
