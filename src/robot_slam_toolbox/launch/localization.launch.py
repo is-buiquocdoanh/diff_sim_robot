@@ -23,7 +23,7 @@ def generate_launch_description():
                 params_file,
                 {
                     'use_sim_time': LaunchConfiguration('use_sim_time'),
-                    'map_file_name': '/home/doanh/diff_sim_robot/src/robot_slam_toolbox/maps/mapv1',
+                    'map_file_name': '/home/doanh/diff_sim_robot/src/robot_slam_toolbox/maps/mapv4',
                     'map_start_pose': [0.0, 0.0, 0.0],
                     'map_start_at_dock': False,
                     'mode': 'localization'

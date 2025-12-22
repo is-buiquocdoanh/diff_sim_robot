@@ -2,8 +2,6 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
 
     <xacro:include filename="inertial_macros.xacro"/>
-
-
     <xacro:property name="chassis_length" value="0.335"/>
     <xacro:property name="chassis_width" value="0.265"/>
     <xacro:property name="chassis_height" value="0.138"/>
@@ -42,9 +40,7 @@
     <!-- BASE LINK -->
 
     <link name="base_link">
-
     </link>
-
 
     <!-- CHASSIS LINK -->
 
