@@ -3,21 +3,14 @@
 <package format="3">
   <name>keyboard_control</name>
   <version>0.0.0</version>
-  <description>Keyboard and GUI control for robot velocity commands</description>
-  <maintainer email="neo@example.com">neo</maintainer>
-  <license>Apache-2.0</license>
-
-  <buildtool_depend>ament_python</buildtool_depend>
-
-  <depend>rclpy</depend>
-  <depend>geometry_msgs</depend>
-  <depend>twist_mux</depend>
-  <depend>tkinter</depend>
+  <description>TODO: Package description</description>
+  <maintainer email="doanhbq@pheniakaa-x.com">neo</maintainer>
+  <license>TODO: License declaration</license>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
   <test_depend>ament_pep257</test_depend>
-  <test_depend>ament_xmllint</test_depend>
+  <test_depend>python3-pytest</test_depend>
 
   <export>
     <build_type>ament_python</build_type>

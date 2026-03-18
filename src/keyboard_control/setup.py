@@ -7,7 +7,7 @@ package_name = 'keyboard_control'
 setup(
     name=package_name,
     version='0.0.0',
-    packages=['keyboard_control'],
+    packages=find_packages(exclude=['test']),
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
@@ -18,10 +18,14 @@ setup(
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='neo',
-    maintainer_email='neo@example.com',
-    description='Keyboard and GUI control for robot velocity commands',
-    license='Apache-2.0',
-    tests_require=['pytest'],
+    maintainer_email='doanhbq@pheniakaa-x.com',
+    description='TODO: Package description',
+    license='TODO: License declaration',
+    extras_require={
+        'test': [
+            'pytest',
+        ],
+    },
     entry_points={
         'console_scripts': [
             'keyboard_control_node = keyboard_control.keyboard_control_node:main',
