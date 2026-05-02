@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
+
+    <joint name="laser_rear_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="laser_rear_frame"/>
+        <origin xyz="-0.18 -0.13 0.065" rpy="0 0 0"/>
+    </joint>
+
+    <link name="laser_rear_frame">
+        <visual>
+            <geometry>
+                <cylinder radius="0.02" length="0.03"/>
+            </geometry>
+            <material name="red"/>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="0.02" length="0.03"/>
+            </geometry>
+        </collision>
+        <xacro:inertial_cylinder mass="0" length="0.03" radius="0.02">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:inertial_cylinder>
+    </link>
+
+
+    <gazebo reference="laser_rear_frame">
+        <material>Gazebo/Red</material>
+
+        <sensor name="laser_rear" type="ray">
+            <pose> 0 0 0 0 0 0 </pose>
+            <visualize>true</visualize>
+            <update_rate>10</update_rate>
+            <ray>
+                <scan>
+                    <horizontal>
+                        <samples>360</samples>
+                        <resolution>1</resolution>
+                        <min_angle>-4.71</min_angle>
+                        <max_angle>0</max_angle>
+                    </horizontal>
+                </scan>
+                <range>
+                    <min>0.1</min>
+                    <max>12</max>
+                </range>
+            </ray>
+
+            <plugin name="laser_rear_controller" filename="libgazebo_ros_ray_sensor.so">
+                <ros>
+                    <argument>~/out:=scan_rear</argument>
+                </ros>
+                <output_type>sensor_msgs/LaserScan</output_type>
+                <frame_name>laser_rear_frame</frame_name>
+            </plugin>
+        </sensor>
+    </gazebo>
+
+</robot>

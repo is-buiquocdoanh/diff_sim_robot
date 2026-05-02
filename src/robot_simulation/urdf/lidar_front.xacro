@@ -1,34 +1,34 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
 
-    <joint name="laser_joint" type="fixed">
+    <joint name="laser_front_joint" type="fixed">
         <parent link="base_link"/>
-        <child link="laser_frame"/>
-        <origin xyz="-0.1 0 0.175" rpy="0 0 0"/>
+        <child link="laser_front_frame"/>
+        <origin xyz="0.18 0.13 0.065" rpy="0 0 0"/>
     </joint>
 
-    <link name="laser_frame">
+    <link name="laser_front_frame">
         <visual>
             <geometry>
-                <cylinder radius="0.05" length="0.04"/>
+                <cylinder radius="0.02" length="0.03"/>
             </geometry>
             <material name="red"/>
         </visual>
         <collision>
             <geometry>
-                <cylinder radius="0.05" length="0.04"/>
+                <cylinder radius="0.02" length="0.03"/>
             </geometry>
         </collision>
-        <xacro:inertial_cylinder mass="0.1" length="0.04" radius="0.05">
+        <xacro:inertial_cylinder mass="0" length="0.03" radius="0.02">
             <origin xyz="0 0 0" rpy="0 0 0"/>
         </xacro:inertial_cylinder>
     </link>
 
 
-    <gazebo reference="laser_frame">
+    <gazebo reference="laser_front_frame">
         <material>Gazebo/Red</material>
 
-        <sensor name="laser" type="ray">
+        <sensor name="laser_front" type="ray">
             <pose> 0 0 0 0 0 0 </pose>
             <visualize>true</visualize>
             <update_rate>10</update_rate>
@@ -37,22 +37,22 @@
                     <horizontal>
                         <samples>360</samples>
                         <resolution>1</resolution>
-                        <min_angle>-3.14</min_angle>
+                        <min_angle>-1.57</min_angle>
                         <max_angle>3.14</max_angle>
                     </horizontal>
                 </scan>
                 <range>
-                    <min>0.3</min>
+                    <min>0.1</min>
                     <max>12</max>
                 </range>
             </ray>
 
-            <plugin name="laser_controller" filename="libgazebo_ros_ray_sensor.so">
+            <plugin name="laser_front_controller" filename="libgazebo_ros_ray_sensor.so">
                 <ros>
-                    <argument>~/out:=scan</argument>
+                    <argument>~/out:=scan_front</argument>
                 </ros>
                 <output_type>sensor_msgs/LaserScan</output_type>
-                <frame_name>laser_frame</frame_name>
+                <frame_name>laser_front_frame</frame_name>
             </plugin>
         </sensor>
     </gazebo>
