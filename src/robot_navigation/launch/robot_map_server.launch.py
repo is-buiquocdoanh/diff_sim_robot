@@ -16,18 +16,18 @@ def generate_launch_description():
 
     map_yaml_arg = DeclareLaunchArgument(
         'map',
-        default_value=os.path.join(get_package_share_directory('robot_navigation'), 'maps', 'warehouse.yaml'),
+        default_value=os.path.join(get_package_share_directory('robot_navigation'), 'maps', 'elevator.yaml'),
         description='Full path to the YAML map file to load'
     )
 
     localization_params_arg = DeclareLaunchArgument(
         'localization_params_file',
-        default_value=os.path.join(get_package_share_directory('robot_navigation'),'config', 'localization_slam_toolbox.yaml'),
+        default_value=os.path.join(get_package_share_directory('robot_navigation'),'config', 'h3_localization_params_v1.yaml'),
         description='Full path to the localization parameters file'
     )
 
     package_dir = get_package_share_directory('robot_navigation')
-    params_file = os.path.join(package_dir, 'config', 'nav2_params_mppi.yaml')
+    params_file = os.path.join(package_dir, 'config', 'h3_nav2_params_v3_mppi.yaml')
     rviz_config = os.path.join(package_dir, 'rviz', 'nav2_default_view.rviz')
 
     # MAP SERVER
@@ -90,95 +90,6 @@ def generate_launch_description():
         }]
     )
 
-    # PLANNER
-    planner_server = Node(
-        package='nav2_planner',
-        executable='planner_server',
-        name='planner_server',
-        output='screen',
-        parameters=[params_file]
-    )
-
-    # CONTROLLER
-    controller_server = Node(
-        package='nav2_controller',
-        executable='controller_server',
-        name='controller_server',
-        output='screen',
-        parameters=[params_file],
-    )
-
-    # SMOOTHER SERVER (bắt buộc)
-    smoother_server = Node(
-        package='nav2_smoother',
-        executable='smoother_server',
-        name='smoother_server',
-        output='screen',
-        parameters=[params_file]
-    )
-
-    # BEHAVIOR TREE NAVIGATOR
-    bt_navigator = Node(
-        package='nav2_bt_navigator',
-        executable='bt_navigator',
-        name='bt_navigator',
-        output='screen',
-        parameters=[params_file]
-    )
-
-    # RECOVERY SERVER (bắt buộc)
-    behavior_server = Node(
-        package='nav2_behaviors',
-        executable='behavior_server',
-        name='behavior_server',
-        output='screen',
-        parameters=[params_file]
-    )
-
-    # VELOCITY SMOOTHER (tùy nhưng nên có)
-    velocity_smoother = Node(
-        package='nav2_velocity_smoother',
-        executable='velocity_smoother',
-        name='velocity_smoother',
-        output='screen',
-        parameters=[params_file],
-    )
-
-    waypoint_follower = Node(
-        package='nav2_waypoint_follower',
-        executable='waypoint_follower',
-        name='waypoint_follower',
-        output='screen',
-        parameters=[params_file]
-)
-
-    # LIFECYCLE MANAGER
-    lifecycle_manager_nav = Node(
-        package='nav2_lifecycle_manager',
-        executable='lifecycle_manager',
-        name='lifecycle_manager_navigation',
-        output='screen',
-        parameters=[{
-            'use_sim_time': LaunchConfiguration('use_sim_time'),
-            'autostart': True,
-            'node_names': [
-                'planner_server',
-                'controller_server',
-                'smoother_server',
-                'bt_navigator',
-                'behavior_server',
-                'velocity_smoother',
-                'waypoint_follower'
-            ]
-        }]
-    )
-
-    # Delay starting navigation lifecycle manager until localization components are active
-    delayed_lifecycle_manager_nav = TimerAction(
-        period=2.0,
-        actions=[lifecycle_manager_nav]
-    )
-
     # RVIZ
     rviz_node = Node(
         package='rviz2',
@@ -197,13 +108,5 @@ def generate_launch_description():
         # amcl,
         lifecycle_manager_loc,
         start_localization_slam_toolbox_node,
-        planner_server,
-        controller_server,
-        smoother_server,
-        bt_navigator,
-        behavior_server,
-        velocity_smoother,
-        waypoint_follower,
-        delayed_lifecycle_manager_nav,
         rviz_node
     ])

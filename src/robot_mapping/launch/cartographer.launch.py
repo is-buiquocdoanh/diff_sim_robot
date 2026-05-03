@@ -21,7 +21,7 @@ def generate_launch_description():
                 '-configuration_basename', configuration_basename
             ],
             remappings=[
-                ('/scan', '/scan')
+                ('/scan', '/scan_front'),
             ],
             parameters=[{'use_sim_time': True}]
         ),

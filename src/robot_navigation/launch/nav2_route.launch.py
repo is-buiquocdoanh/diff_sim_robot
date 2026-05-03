@@ -144,13 +144,14 @@ def generate_launch_description():
         parameters=[params_file],
     )
 
-    waypoint_follower = Node(
-        package='nav2_waypoint_follower',
-        executable='waypoint_follower',
-        name='waypoint_follower',
+    # ROUTE SERVER
+    route_server = Node(
+        package='nav2_route',
+        executable='route_server',
+        name='route_server',
         output='screen',
         parameters=[params_file]
-)
+    )
 
     # LIFECYCLE MANAGER
     lifecycle_manager_nav = Node(
@@ -168,7 +169,7 @@ def generate_launch_description():
                 'bt_navigator',
                 'behavior_server',
                 'velocity_smoother',
-                'waypoint_follower'
+                'route_server',
             ]
         }]
     )
@@ -178,6 +179,7 @@ def generate_launch_description():
         period=2.0,
         actions=[lifecycle_manager_nav]
     )
+    
 
     # RVIZ
     rviz_node = Node(
@@ -203,7 +205,7 @@ def generate_launch_description():
         bt_navigator,
         behavior_server,
         velocity_smoother,
-        waypoint_follower,
         delayed_lifecycle_manager_nav,
+        route_server,
         rviz_node
     ])

@@ -7,88 +7,16 @@ from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
 
-    # Declare launch arguments
+    # Declare launch argument for use_sim_time
     use_sim_time_arg = DeclareLaunchArgument(
         'use_sim_time',
         default_value='true',
         description='Use simulation time'
     )
 
-    map_yaml_arg = DeclareLaunchArgument(
-        'map',
-        default_value=os.path.join(get_package_share_directory('robot_navigation'), 'maps', 'warehouse.yaml'),
-        description='Full path to the YAML map file to load'
-    )
-
-    localization_params_arg = DeclareLaunchArgument(
-        'localization_params_file',
-        default_value=os.path.join(get_package_share_directory('robot_navigation'),'config', 'localization_slam_toolbox.yaml'),
-        description='Full path to the localization parameters file'
-    )
-
     package_dir = get_package_share_directory('robot_navigation')
-    params_file = os.path.join(package_dir, 'config', 'nav2_params_mppi.yaml')
+    params_file = os.path.join(package_dir, 'config', 'nav2_params_dwb.yaml')
     rviz_config = os.path.join(package_dir, 'rviz', 'nav2_default_view.rviz')
-
-    # MAP SERVER
-    map_server = Node(
-        package='nav2_map_server',  
-        executable='map_server',
-        name='map_server',
-        output='screen',
-        parameters=[{'yaml_filename': LaunchConfiguration('map')},
-                    {'use_sim_time': LaunchConfiguration('use_sim_time')}]
-    )
-
-    # MAP SERVER UPDATE
-    map_saver = Node(
-        package='nav2_map_server',
-        executable='map_saver_server',
-        name='map_saver',
-        output='screen',
-        parameters=[params_file]
-    )
-
-    # AMCL
-    amcl = Node(
-        package='nav2_amcl',
-        executable='amcl',
-        name='amcl',
-        output='screen',
-        parameters=[params_file]
-    )
-
-    # Localization SLAM TOOLBOX
-    start_localization_slam_toolbox_node = Node(
-        parameters=[
-          LaunchConfiguration('localization_params_file'),
-          {'use_sim_time': LaunchConfiguration('use_sim_time')}
-        ],
-        package='slam_toolbox',
-        executable='localization_slam_toolbox_node',
-        name='slam_toolbox',
-        remappings=[
-        ('/map', '/map')
-        ],
-        output='screen')
-
-    # LIFECYCLE MANAGER
-    lifecycle_manager_loc = Node(
-    package='nav2_lifecycle_manager',
-    executable='lifecycle_manager',
-    name='lifecycle_manager_localization',
-    output='screen',
-    parameters=[{
-            'use_sim_time': LaunchConfiguration('use_sim_time'),
-            'autostart': True,
-            'node_names': [
-                'map_server',
-                'map_saver',
-                # 'amcl'
-                # 'localization_slam_toolbox_node'
-            ]
-        }]
-    )
 
     # PLANNER
     planner_server = Node(
@@ -106,6 +34,7 @@ def generate_launch_description():
         name='controller_server',
         output='screen',
         parameters=[params_file],
+        # remappings=[('/cmd_vel', '/neo_robotics/K1_demo/V0_0_0/cmd_vel')]
     )
 
     # SMOOTHER SERVER (bắt buộc)
@@ -142,15 +71,8 @@ def generate_launch_description():
         name='velocity_smoother',
         output='screen',
         parameters=[params_file],
+        # remappings=[('/cmd_vel', '/neo_robotics/K1_demo/V0_0_0/cmd_vel')]
     )
-
-    waypoint_follower = Node(
-        package='nav2_waypoint_follower',
-        executable='waypoint_follower',
-        name='waypoint_follower',
-        output='screen',
-        parameters=[params_file]
-)
 
     # LIFECYCLE MANAGER
     lifecycle_manager_nav = Node(
@@ -167,8 +89,7 @@ def generate_launch_description():
                 'smoother_server',
                 'bt_navigator',
                 'behavior_server',
-                'velocity_smoother',
-                'waypoint_follower'
+                'velocity_smoother'
             ]
         }]
     )
@@ -179,31 +100,15 @@ def generate_launch_description():
         actions=[lifecycle_manager_nav]
     )
 
-    # RVIZ
-    rviz_node = Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
-        output='screen',
-        arguments=['-d', rviz_config]
-    )
-
     return LaunchDescription([
         use_sim_time_arg,
-        map_yaml_arg,
-        localization_params_arg,
-        map_server,
-        map_saver,
-        # amcl,
-        lifecycle_manager_loc,
-        start_localization_slam_toolbox_node,
         planner_server,
         controller_server,
         smoother_server,
         bt_navigator,
         behavior_server,
         velocity_smoother,
-        waypoint_follower,
         delayed_lifecycle_manager_nav,
-        rviz_node
+        # rviz_node,
+        # cmd_vel_relay,
     ])

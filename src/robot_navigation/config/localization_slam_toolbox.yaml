@@ -1,7 +1,5 @@
 slam_toolbox:
   ros__parameters:
-    
-    use_sim_time: true
 
     # Plugin params
     solver_plugin: solver_plugins::CeresSolver
@@ -17,21 +15,24 @@ slam_toolbox:
     base_frame: base_link
     scan_topic: /scan_front
     use_map_saver: true
-    mode: mapping
+    mode: localization
+    use_sim_time: true
 
     # if you'd like to immediately start continuing a map at a given pose
     # or at the dock, but they are mutually exclusive, if pose is given
     # will use pose
-    # map_file_name: /home/phenet-04/robot_ws/src/My_robot_2/map/slam_map/my_map_serial
-    # map_start_pose: [0.0, 0.0, 0.0]
-    map_start_at_dock: true
+    # map_file_name: <map_file_name>
+    map_file_name: ""
+    map_start_pose: [0.0, 0.0, 0.0]
+    # map_start_at_dock: true
 
-    ddebug_logging: false
+    debug_logging: false
     throttle_scans: 1
     transform_publish_period: 0.02 #if 0 never publishes odometry
-    map_update_interval: 5.0
+    map_update_interval: 99999999.0
     resolution: 0.05
-    min_laser_range: 0.1 #for rastering images
+    restamp_tf: false
+    min_laser_range: 0.3 #for rastering images
     max_laser_range: 20.0 #for rastering images
     minimum_time_interval: 0.5
     transform_timeout: 0.2
@@ -42,28 +43,29 @@ slam_toolbox:
     # General Parameters
     use_scan_matching: true
     use_scan_barycenter: true
-    minimum_travel_distance: 0.5 # quang duong toi thieu de them du lieu vao map  
-    minimum_travel_heading: 0.5 # goc toi thieu de them du lieu vao map
+    minimum_travel_distance: 0.5
+    minimum_travel_heading: 0.5
+    check_min_dist_and_heading_precisely: false
     scan_buffer_size: 10
     scan_buffer_maximum_scan_distance: 10.0
-    link_match_minimum_response_fine: 0.1  # drift thi thang nhe 0.15-0.2
-    link_scan_maximum_distance: 1.5 # gap 3 lan minimum_travel_distance
-    loop_search_maximum_distance: 3.0 # 1/2 max khoang cach scan match de tim loop closure
-    do_loop_closing: true 
-    loop_match_minimum_chain_size: 10  # so luong scan toi thieu de tim loop closure         
+    link_match_minimum_response_fine: 0.1  
+    link_scan_maximum_distance: 1.5
+    loop_search_maximum_distance: 3.0
+    do_loop_closing: false
+    loop_match_minimum_chain_size: 10           
     loop_match_maximum_variance_coarse: 3.0  
     loop_match_minimum_response_coarse: 0.35    
     loop_match_minimum_response_fine: 0.45
 
     # Correlation Parameters - Correlation Parameters
-    correlation_search_space_dimension: 0.5 # odom chuan thi giam xuong
+    correlation_search_space_dimension: 0.5
     correlation_search_space_resolution: 0.01
     correlation_search_space_smear_deviation: 0.1 
 
     # Correlation Parameters - Loop Closure Parameters
-    loop_search_space_dimension: 8.0 # tuy thuoc vao dien tich map
-    loop_search_space_resolution: 0.05 # giam xuong de tim loop closure, nhung se tang thoi gian tinh toan
-    loop_search_space_smear_deviation: 0.03 
+    loop_search_space_dimension: 8.0
+    loop_search_space_resolution: 0.05
+    loop_search_space_smear_deviation: 0.03
 
     # Scan Matcher Parameters
     distance_variance_penalty: 0.5      
@@ -75,5 +77,5 @@ slam_toolbox:
     minimum_angle_penalty: 0.9
     minimum_distance_penalty: 0.5
     use_response_expansion: true
-    min_pass_through: 2 # mot o grid phai co 2 scan pass qua thi moi duoc cap nhat trang thai
-    occupancy_threshold: 0.1 # so lan scan dap vao vat can chia so lan di xuyen qua, neu lon hon thi duoc danh dau la occupied
+    min_pass_through: 2
+    occupancy_threshold: 0.1
